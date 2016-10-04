@@ -1,8 +1,6 @@
 
 ## Proof of Concept React Native with Native Starter Kit
 
-![Native-Starter-Kit](/Screenshots/logo.png)
-
 ## Get Started
 
 ###1. System Requirements
