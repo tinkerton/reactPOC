@@ -24,12 +24,9 @@ class Login extends Component {
     };
   }
 
-  setUser(name) {
-    this.props.setUser(name);
-  }
-
   replaceRoute(route) {
-    this.setUser(this.state.name);
+  //  this.setUser(this.state.name);
+    this.props.setUser(this.state.name);
     this.props.replaceRoute(route);
   }
 

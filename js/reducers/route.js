@@ -8,10 +8,12 @@ import {
   POP_TO_ROUTE,
   REPLACE_ROUTE,
   REPLACE_OR_PUSH_ROUTE,
+  SET_PAGE_HEADER,
 } from '../actions/route';
 
 export type State = {
-  routes: Array<string>
+  routes: Array<string>,
+  pageHeader:string
 }
 
 const initialState = {
@@ -24,6 +26,7 @@ export default function (state:State = initialState, action:Action): State {
     // console.log(action.route, "route");
     globalNav.navigator.push({ id: action.route });
     return {
+      ...state,
       routes: [...state.routes, action.route],
     };
   }
@@ -33,6 +36,7 @@ export default function (state:State = initialState, action:Action): State {
     const routes = state.routes;
     routes.pop();
     return {
+      ...state,
       routes: [...routes, action.route],
     };
   }
@@ -57,6 +61,7 @@ export default function (state:State = initialState, action:Action): State {
     }
 
     return {
+      ...state,
       routes: [...routes, action.route],
     };
   }
@@ -66,6 +71,7 @@ export default function (state:State = initialState, action:Action): State {
     const routes = state.routes;
     routes.pop();
     return {
+      ...state,
       routes,
     };
   }
@@ -77,6 +83,7 @@ export default function (state:State = initialState, action:Action): State {
       // keep popping till you get to the route
     }
     return {
+      ...state,
       routes: [...routes, action.route],
     };
   }
@@ -87,6 +94,13 @@ export default function (state:State = initialState, action:Action): State {
       ...savedData,
     };
   }
+  if (action.type === SET_PAGE_HEADER) {
+    return {
+      ...state,
+      pageHeader: action.payload,
+    };
+  }
+
 
   return state;
 }

@@ -6,6 +6,7 @@ export const REPLACE_ROUTE = 'REPLACE_ROUTE';
 export const REPLACE_OR_PUSH_ROUTE = 'REPLACE_OR_PUSH_ROUTE';
 export const POP_ROUTE = 'POP_ROUTE';
 export const POP_TO_ROUTE = 'POP_TO_ROUTE';
+export const SET_PAGE_HEADER = 'SET_PAGE_HEADER';
 
 export function replaceRoute(route:string, passProps:any):Action {
   return {
@@ -43,5 +44,11 @@ export function popToRoute(route:string, passProps:any):Action {
     type: POP_TO_ROUTE,
     route,
     passProps,
+  };
+}
+export function setPageHeader(pageHeader: string):Action {
+  return {
+    type: SET_PAGE_HEADER,
+    payload:pageHeader,
   };
 }

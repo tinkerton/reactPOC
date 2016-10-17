@@ -1,10 +1,11 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Title, Content, Text, Button, Icon } from 'native-base';
+import { Container, Header, Title, Content, Text, Button, Icon, InputGroup, Input, List, ListItem } from 'native-base';
 
 import { openDrawer } from '../../actions/drawer';
 import { popRoute } from '../../actions/route';
+import { updateListItem } from '../../actions/list';
 import styles from './styles';
 
 class BlankPage extends Component {
@@ -12,17 +13,26 @@ class BlankPage extends Component {
   static propTypes = {
     popRoute: React.PropTypes.func,
     openDrawer: React.PropTypes.func,
-    name: React.PropTypes.string,
+    pageHeader: React.PropTypes.string,
     index: React.PropTypes.number,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
+    list: React.PropTypes.arrayOf(React.PropTypes.object),
+    updateListItem: React.PropTypes.func,
   }
 
   popRoute() {
     this.props.popRoute();
   }
 
+  saveMyForm() {
+    let formData ={};
+    formData.name = this.state.name;
+    formData.id = this.state.id;
+    this.props.updateListItem(formData);
+    this.popRoute()
+    }
+
   render() {
-    const { props: { name, index, list } } = this;
+    const { props: { pageHeader, index, list } } = this;
 
     return (
       <Container style={styles.container}>
@@ -31,7 +41,7 @@ class BlankPage extends Component {
             <Icon name="ios-arrow-back" />
           </Button>
 
-          <Title>{(name) ? this.props.name : 'Blank Page'}</Title>
+          <Title>{(pageHeader) ? this.props.pageHeader : 'Blank Page'}</Title>
 
           <Button transparent onPress={this.props.openDrawer}>
             <Icon name="ios-menu" />
@@ -39,9 +49,28 @@ class BlankPage extends Component {
         </Header>
 
         <Content padder>
-          <Text>
-            {(!isNaN(index)) ? list[index] : 'Create Something Awesome . . .'}
-          </Text>
+          <List>
+            <ListItem>
+              <InputGroup style={styles.input}>
+
+                <Input placeholder={list[index].name} inlineLabel label='NAME' onChangeText={name => this.setState({ name })} />
+              </InputGroup>
+              </ListItem>
+            <ListItem>
+              <InputGroup>
+                  <Input placeholder={list[index].id}  inlineLabel label='ID' onChangeText={id => this.setState({ id })}/>
+              </InputGroup>
+            </ListItem>
+          </List>
+
+
+          <Button block iconRight onPress={() => this.saveMyForm()} >
+              <Icon name='ios-arrow-forward'/>
+              Save
+          </Button>
+          {/* <Text>
+            {(!isNaN(index)) ? list[index].name : 'Create Something Awesome . . .'}
+          </Text>*/}
         </Content>
       </Container>
     );
@@ -52,12 +81,13 @@ function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
     popRoute: () => dispatch(popRoute()),
+    updateListItem: formDataItem => dispatch(updateListItem(formDataItem)),
   };
 }
 
 function mapStateToProps(state) {
   return {
-    name: state.user.name,
+    pageHeader: state.route.pageHeader,
     index: state.list.selectedIndex,
     list: state.list.list,
   };

@@ -8,7 +8,10 @@ export type Action =
     | { type: 'OPEN_DRAWER'}
     | { type: 'CLOSE_DRAWER'}
     | { type: 'SET_USER', name: string}
-    | { type: 'SET_LIST', list: string}
+    | { type: 'SET_PAGE_HEADER', name: string}
+    | { type: 'SET_LIST', list: object}
+    | { type: 'UPDATE_LIST_ITEM', item: object}
+
 
 export type GetState = () => Object;
 export type PromiseAction = Promise<Action>;

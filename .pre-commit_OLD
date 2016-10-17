@@ -12,7 +12,7 @@
 # }
 # lintit
 # exit 0
-
+PATH=$PATH:/usr/local/bin
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
 
 if [[ "$STAGED_FILES" = "" ]]; then

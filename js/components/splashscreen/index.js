@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { View } from 'native-base';
+import { View, Text } from 'native-base';
 
 export default class SplashPage extends Component {
 
@@ -12,14 +12,16 @@ export default class SplashPage extends Component {
     const navigator = this.props.navigator;
     setTimeout(() => {
       navigator.replace({
-        id: 'index',
+        id: 'login',
       });
     }, 1500);
   }
 
   render() { // eslint-disable-line class-methods-use-this
     return (
-      <View />
+      <View>
+      <Text>Splashscreen test</Text>
+      </View>
     );
   }
 }
