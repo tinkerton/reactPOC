@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Title, Content, Text, Button, Icon } from 'native-base';
+import { Container, Header, Title, Content, InputGroup, Input, Text, Button, Icon } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 
 import { openDrawer, closeDrawer } from '../../actions/drawer';
@@ -10,6 +10,8 @@ import { replaceRoute, replaceOrPushRoute, pushNewRoute, setPageHeader } from '.
 import { setIndex, setList } from '../../actions/list';
 import myTheme from '../../themes/base-theme';
 import styles from './styles';
+import * as API from '../../OpenWeatherApi';
+
 
 class Home extends Component {
 
@@ -21,25 +23,31 @@ class Home extends Component {
     pushNewRoute: React.PropTypes.func,
     setIndex: React.PropTypes.func,
     name: React.PropTypes.string,
-    list: React.PropTypes.arrayOf(React.PropTypes.object),
-    setList: React.PropTypes.func,
+    cityList: React.PropTypes.arrayOf(React.PropTypes.object),
+    addCity: React.PropTypes.func,
     setPageHeader: React.PropTypes.func,
 
   }
 
-
-
-  getNewList(argument) {
-    return fetch('http://www.mocky.io/v2/57f4d8b2250000130f134853')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.props.setList(responseJson.list);
-        return;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  constructor(props) {
+    super(props);
+    this.state = {
+      cityName: '',
+    };
   }
+
+
+  // getNewList(argument) {
+  //   return fetch('http://www.mocky.io/v2/57f4d8b2250000130f134853')
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       this.props.setList(responseJson.list);
+  //       return;
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }
 
   replaceRoute(route) {
     this.props.replaceRoute(route);
@@ -47,8 +55,16 @@ class Home extends Component {
 
   pushNewRoute(route, index) {
     this.props.setIndex(index);
-    this.props.setPageHeader("Header for " + this.props.list[index].name)
+    this.props.setPageHeader('Header for ' + this.props.cityList[index].name);
     this.props.pushNewRoute(route);
+  }
+
+  addCity() {
+    console.log(this.state.cityName);
+    API.getCity(this.state.cityName)
+      .then(city => this.props.addCity(city)
+      );
+    this.setState(cityName: '');
   }
 
   render() {
@@ -67,15 +83,21 @@ class Home extends Component {
         </Header>
 
         <Content>
-        <Button block info onPress={() => this.getNewList('mySearchString')}>Search</Button>
+          <InputGroup>
+            <Input
+              placeHolder='Input city'
+              onChangeText={name => this.setState({ cityName: name })}
+              />
+          </InputGroup>
+          <Button block info onPress={() => this.addCity()}>Search</Button>
           <Grid style={styles.mt}>
-            {this.props.list.map((item, i) =>
+            {this.props.cityList.map((item, i) =>
               <Row key={i}>
                 <TouchableOpacity
                   style={styles.row}
                   onPress={() => this.pushNewRoute('blankPage', i)}
-                >
-                  <Text style={styles.text}>{item.name} ({item.id})</Text>
+                  >
+                  <Text style={styles.text}>{item.name}</Text>
                 </TouchableOpacity>
               </Row>
             )}
@@ -92,15 +114,15 @@ function bindAction(dispatch) {
     replaceRoute: route => dispatch(replaceRoute(route)),
     pushNewRoute: route => dispatch(pushNewRoute(route)),
     setIndex: index => dispatch(setIndex(index)),
-    setList: list => dispatch(setList(list)),
-    setPageHeader : pageHeader =>dispatch(setPageHeader(pageHeader)),
+    addCity: city => dispatch(addCity(city)),
+    setPageHeader: pageHeader => dispatch(setPageHeader(pageHeader)),
   };
 }
 
 function mapStateToProps(state) {
   return {
     name: state.user.name,
-    list: state.list.list,
+    cityList: state.list.cityList,
   };
 }
 
