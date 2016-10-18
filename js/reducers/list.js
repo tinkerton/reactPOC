@@ -3,7 +3,7 @@ import type { Action } from '../actions/types';
 import { SET_INDEX, SET_LIST, UPDATE_LIST_ITEM } from '../actions/list';
 
 export type State = {
-  list: object,
+  list: Array,
 }
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
     { name: 'jsonItem4', id: '5550004' },
     { name: 'jsonItem5', id: '5550005' },
     { name: 'jsonItem6', id: '5550006' },
-    { name: 'jsonItem7', id: '5550007' }
+    { name: 'jsonItem7', id: '5550007' },
   ],
   selectedIndex: undefined,
 };
@@ -44,8 +44,4 @@ export default function (state: State = initialState, action: Action): State {
 
 
   return state;
-
-
-
-
 }
